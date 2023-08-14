@@ -1,5 +1,5 @@
 sudo apt-get update
-sudo apt-get dist-upgrade
+sudo apt-get dist-upgrade -y
 sudo apt-get install bash \
                      curl \
                      file \
@@ -13,6 +13,7 @@ sudo apt-get install bash \
                      pkg-config \
                      libgtk-3-dev \
                      --ignore-missing
+                     -y
 
 # root
 DEVROOT=~/development
