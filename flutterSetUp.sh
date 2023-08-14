@@ -93,14 +93,14 @@ mkdir -p $ANDROID_AVD_HOME
 mkdir -p $ANDROID_AVD_HOME
 
 # # flutter install 
-# git clone -b master https://github.com/flutter/flutter.git "${FLUTTER_ROOT}"
+git clone -b master https://github.com/flutter/flutter.git "${FLUTTER_ROOT}"
 
 # # remove git
 # # find ${FLUTTER_ROOT} -name *\.git* | xargs rm -rf
 
 
 # Android SDK Command line Get Download URL
-# cmd_tool_URL=""
+cmd_tool_URL=""
 if [[ $(curl https://developer.android.com/studio/index.html -L -k -is) =~ (https://(/*-*_*\.*[a-zA-Z]*)*commandlinetools-linux-[0-9]*_latest\.zip) ]]; then cmd_tool_URL=${BASH_REMATCH[1]}; fi
 
 curl $cmd_tool_URL -o $ANDROID_HOME/cmd_tool.zip
