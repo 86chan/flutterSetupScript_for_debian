@@ -181,7 +181,8 @@ if which axel >/dev/null 2>&1; then DLCMD='axel -n10'; fi
 # flutter install
 echo 
 echo '------------------------------------------------------------------------------------------'
-echo 'git clone flutter...'
+# echo 'git clone flutter...'
+echo 'Downloading flutter stable ver...'
 echo '------------------------------------------------------------------------------------------'
 # git clone --depth 1 -b master https://github.com/flutter/flutter.git "${FLUTTER_ROOT}"
 curl -s https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json \
@@ -264,4 +265,4 @@ echo 'if [ -f ~/.flutter_env ]; then' >> ${BASHRC_PATH}
 echo '    . ~/.flutter_env' >> ${BASHRC_PATH}
 echo 'fi' >> ${BASHRC_PATH}
 
-exit 0
+exit 0cd 
