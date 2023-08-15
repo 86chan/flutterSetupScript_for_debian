@@ -203,7 +203,10 @@ flutter_stable_url=$(cat ${DEVROOT_PATH}/flutter_releases_linux.json \
 $DLCMD ${flutter_stable_url} -o ${DEVROOT_PATH}/flutter_releases_linux.tar.xz
 tar Jxfv ${DEVROOT_PATH}/flutter_releases_linux.tar.xz -C ${DEVROOT_PATH}
 
+# rm
 rm ${DEVROOT_PATH}/flutter_releases_linux.*
+# find ${FLUTTER_ROOT} -name *\.git* | xargs rm -rf
+
 
 # Android SDK Command line Get Download URL
 echo 
@@ -265,4 +268,4 @@ echo 'if [ -f ~/.flutter_env ]; then' >> ${BASHRC_PATH}
 echo '    . ~/.flutter_env' >> ${BASHRC_PATH}
 echo 'fi' >> ${BASHRC_PATH}
 
-exit 0cd 
+exit 0
