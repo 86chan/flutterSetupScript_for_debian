@@ -25,18 +25,6 @@ sudo $APTCMD -y install bash \
                         openjdk-17-jdk \
                         --ignore-missing
 
-# sudo mkdir -p /etc/apt/keyrings;
-# curl -sL https://packages.adoptium.net/artifactory/api/gpg/key/public \
-#     | sudo tee /etc/apt/keyrings/adoptium.asc
-
-# echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/ {print$2}' /etc/os-release) main" \
-#     | sudo tee /etc/apt/sources.list.d/adoptium.list
-
-# sudo apt update
-# sudo $APTCMD -y install temurin-11-jdk
-
-# readlink -f $(which java) | sed 's:/bin/java::'
-
 
 # set Path Android SDK and Flutter SDK
 echo 
@@ -142,53 +130,11 @@ DLCMD='curl -L'
 if which axel >/dev/null 2>&1; then DLCMD='axel -n10'; fi
 
 
-# # Download JDK 11
-# echo 
-# echo '------------------------------------------------------------------------------------------'
-# echo 'Downloading and Extracting JDK 11 from Eclipse Temurin by Adoptium'
-# echo '------------------------------------------------------------------------------------------'
-# JDK_11_URL=$(curl -sL https://api.github.com/repos/adoptium/temurin11-binaries/releases/latest \
-#                     | grep -e 'http.*OpenJDK11U-jdk_x64_linux_hotspot_.*\.tar\.gz"' \
-#                     | cut -d : -f 2,3 \
-#                     | tr -d \")
-
-# echo 'Downloading: '${JDK_11_URL}
-# $DLCMD ${JDK_11_URL} -o ${DEVROOT_PATH}/jdk11.tar.gz
-# tar -zxf ${DEVROOT_PATH}/jdk11.tar.gz -C ${DEVROOT_PATH}
-# rm ${DEVROOT_PATH}/jdk11.tar.gz
-
-# # set env
-# _p_java_home=JAVA_HOME=$(find ${DEVROOT_PATH} -maxdepth 1 -name jdk-*)
-# eval ${_p_java_home}
-
-# # set path
-# _p_java_home_bin='${PATH}:${JAVA_HOME}/bin'
-# export PATH=$(eval echo ${_p_java_home_bin})
-
-# echo '# JAVA_HOME' >> ${FLUTTERENV_PATH}
-# echo 'export '$(eval echo ${_p_java_home}) >> ${FLUTTERENV_PATH}
-# echo 'export PATH='${JAVA_HOME} >> ${FLUTTERENV_PATH}
-
-# # flat to PATH
-# export PATH=$(printf %s "${PATH}" | awk -v RS=: -v ORS=: '!arr[$0]++')
-
-# # print Paths
-# echo '    FLUTTER_ROOT: '${FLUTTER_ROOT}
-# echo '    ANDROID_HOME: '${ANDROID_HOME}
-# echo 'ANDROID_SDK_HOME: '${ANDROID_SDK_HOME}
-# echo 'ANDROID_SDK_ROOT: '${ANDROID_SDK_ROOT}
-# echo 'ANDROID_AVD_HOME: '${ANDROID_AVD_HOME}
-# echo '       JAVA_HOME: '${JAVA_HOME}
-# echo '            PATH: '${PATH}
-
-
 # flutter install
 echo 
 echo '------------------------------------------------------------------------------------------'
-# echo 'git clone flutter...'
 echo 'Downloading flutter stable ver...'
 echo '------------------------------------------------------------------------------------------'
-# git clone --depth 1 -b master https://github.com/flutter/flutter.git "${FLUTTER_ROOT}"
 curl -s https://storage.googleapis.com/flutter_infra_release/releases/releases_linux.json \
     | head -n300 > ${DEVROOT_PATH}/flutter_releases_linux.json
 
@@ -209,7 +155,6 @@ tar Jxfv ${DEVROOT_PATH}/flutter_releases_linux.tar.xz -C ${DEVROOT_PATH}
 
 # rm
 rm ${DEVROOT_PATH}/flutter_releases_linux.*
-# find ${FLUTTER_ROOT} -name *\.git* | xargs rm -rf
 
 
 # Android SDK Command line Get Download URL
@@ -238,7 +183,6 @@ find ${MVCMDTL}/.. -maxdepth 1 ! -name latest \
     | grep -E '\.\./' \
     | xargs -I%% mv %% ${MVCMDTL}/.
 
-
 # licenses accept
 echo 
 echo '------------------------------------------------------------------------------------------'
@@ -246,22 +190,55 @@ echo 'setup android sdkmanager...'
 echo '------------------------------------------------------------------------------------------'
 sdkmanager --licenses --verbose
 echo y | flutter doctor --android-licenses
+
+flutter --disable-telemetry
+dart --disable-analytics
+
 sdkmanager --update
 
 # sdk install
-sdkmanager 'build-tools;29.0.3' \
-           'build-tools;30.0.3' \
-           'build-tools;31.0.0' \
-           'build-tools;32.0.0' \
-           'platforms;android-29' \
-           'platforms;android-30' \
-           'platforms;android-31' \
-           'platforms;android-32' \
-           'platform-tools' \
-           'patcher;v4'
+sdkmanager \
+        'build-tools;31.0.0' \
+        'build-tools;32.0.0' \
+        'build-tools;33.0.0' \
+        'platforms;android-31' \
+        'platforms;android-32' \
+        'platforms;android-33' \
+        'platform-tools' \
+        'patcher;v4'
 
-flutter doctor
+echo 
+echo '------------------------------------------------------------------------------------------'
+echo 'flutter doctor'
+echo '------------------------------------------------------------------------------------------'
+flutter doctor -v
 
+echo 
+echo '------------------------------------------------------------------------------------------'
+echo 'flutter version'
+echo '------------------------------------------------------------------------------------------'
+flutter --version
+
+echo 
+echo '------------------------------------------------------------------------------------------'
+echo 'dart version'
+echo '------------------------------------------------------------------------------------------'
+dart --version
+
+echo 
+echo '------------------------------------------------------------------------------------------'
+echo 'sdkmanager version and Installed Packages'
+echo '------------------------------------------------------------------------------------------'
+sdkmanager --version
+sdkmanager --list_installed
+
+echo 
+echo '------------------------------------------------------------------------------------------'
+echo 'java version'
+echo '------------------------------------------------------------------------------------------'
+java --version
+echo 
+echo 
 
 
 # add .flutter_env to .bashrc
