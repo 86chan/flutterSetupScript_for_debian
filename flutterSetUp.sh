@@ -136,9 +136,11 @@ mkdir -p ${ANDROID_SDK_ROOT}
 mkdir -p ${ANDROID_AVD_HOME}
 mkdir -p ${ANDROID_AVD_HOME}
 
+
 # set Downloader
 DLCMD='curl -L'
 if which axel >/dev/null 2>&1; then DLCMD='axel -n10'; fi
+
 
 # # Download JDK 11
 # echo 
@@ -155,10 +157,11 @@ if which axel >/dev/null 2>&1; then DLCMD='axel -n10'; fi
 # tar -zxf ${DEVROOT_PATH}/jdk11.tar.gz -C ${DEVROOT_PATH}
 # rm ${DEVROOT_PATH}/jdk11.tar.gz
 
-# # set env and path
+# # set env
 # _p_java_home=JAVA_HOME=$(find ${DEVROOT_PATH} -maxdepth 1 -name jdk-*)
 # eval ${_p_java_home}
 
+# # set path
 # _p_java_home_bin='${PATH}:${JAVA_HOME}/bin'
 # export PATH=$(eval echo ${_p_java_home_bin})
 
@@ -177,6 +180,7 @@ if which axel >/dev/null 2>&1; then DLCMD='axel -n10'; fi
 # echo 'ANDROID_AVD_HOME: '${ANDROID_AVD_HOME}
 # echo '       JAVA_HOME: '${JAVA_HOME}
 # echo '            PATH: '${PATH}
+
 
 # flutter install
 echo 
@@ -234,13 +238,14 @@ find ${MVCMDTL}/.. -maxdepth 1 ! -name latest \
     | grep -E '\.\./' \
     | xargs -I%% mv %% ${MVCMDTL}/.
 
+
 # licenses accept
 echo 
 echo '------------------------------------------------------------------------------------------'
 echo 'setup android sdkmanager...'
 echo '------------------------------------------------------------------------------------------'
 sdkmanager --licenses --verbose
-flutter doctor --android-licenses
+echo y | flutter doctor --android-licenses
 sdkmanager --update
 
 # sdk install
@@ -257,8 +262,10 @@ sdkmanager 'build-tools;29.0.3' \
 
 flutter doctor
 
+
+
 # add .flutter_env to .bashrc
-if [ $(grep -q '# .flutter_env' ~/.bashrc) ]; then
+if [ 0 = $(grep -q '# .flutter_env' ~/.bashrc; echo $?) ]; then
     exit 1
 fi
 
